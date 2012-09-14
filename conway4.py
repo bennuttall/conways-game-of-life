@@ -31,15 +31,6 @@ class Test(unittest.TestCase):
         new_cell_alive = evolve(cell_alive=False, num_neighbours=1)
         self.assertFalse(new_cell_alive)
 
-    def test_1x1_grid_evolves_correctly(self):
-        world = [[0]]
-        new_world = evolve_world(world)
-        self.assertEqual([[0]], new_world)
-
-        world = [[1]]
-        new_world = evolve_world(world)
-        self.assertEqual([[1]], new_world)
-
     def test_count_neighbours_of_1x1_world(self):
         world = [[0]]
         cell = (0, 0)
@@ -73,20 +64,26 @@ class Test(unittest.TestCase):
         world = [[1, 0, 1, 0, 1],
                  [0, 1, 0, 1, 1],
                  [1, 0, 1, 0, 1],
-                 [0, 1, 0, 1, 1],
-                 [1, 0, 1, 0, 1]]
+                 [0, 1, 1, 1, 1],
+                 [1, 0, 0, 0, 1]]
         cell = (0, 0)
         num_neighbours = count_neighbours(world, cell)
         self.assertEqual(1, num_neighbours)
         cell = (2, 2)
         num_neighbours = count_neighbours(world, cell)
-        self.assertEqual(4, num_neighbours)
-        cell = (4, 2)
-        num_neighbours = count_neighbours(world, cell)
-        self.assertEqual(2, num_neighbours)
+        self.assertEqual(5, num_neighbours)
         cell = (4, 3)
         num_neighbours = count_neighbours(world, cell)
         self.assertEqual(4, num_neighbours)
+
+    def test_1x1_grid_evolves_correctly(self):
+        world = [[0]]
+        new_world = evolve_world(world)
+        self.assertEqual([[0]], new_world)
+
+        world = [[1]]
+        new_world = evolve_world(world)
+        self.assertEqual([[1]], new_world)
 
 
 def evolve(cell_alive, num_neighbours):

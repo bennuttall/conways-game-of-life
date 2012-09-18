@@ -53,6 +53,7 @@ def count_neighbours(world, cell):
 
     return num_neighbours
 
+
 def get_random_world(rows, cols=False):
     cols = cols if cols else rows
     world = []
@@ -64,26 +65,30 @@ def get_random_world(rows, cols=False):
         world.append(row)
     return world
 
-def world_to_string(world):
+
+def world_to_string(world, char):
     string = ''
     for row in world:
         for cell in row:
-            string += 'O ' if cell else '  '
+            string += char + ' ' if cell else '  '
         string += "\n"
     return string
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rows", help="height of the grid", type=int)
-    parser.add_argument("--cols", help="width of the grid", type=int)
+    parser.add_argument("-r", "--rows", help="height of the grid", type=int, default=25)
+    parser.add_argument("-c", "--cols", help="width of the grid", type=int, default=25)
+    parser.add_argument("--char", help="character to represent cell", default='O')
     args = parser.parse_args()
 
-    rows = args.rows if args.rows else 50
-    cols = args.cols if args.cols else rows
+    rows = args.rows
+    cols = args.cols
+    char = args.char
     world = get_random_world(rows, cols)
     while True:
         world = evolve_world(world)
-        print world_to_string(world)
+        print world_to_string(world, char)
         time.sleep(0.2)
 
 if __name__ == '__main__':

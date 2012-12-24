@@ -11,4 +11,4 @@ Various Python implementations of the Game of Life, with different coding styles
     - Any live cell with more than three neighbours dies (overpopulation)
     - Any dead cell with exactly three neighbours becomes alive (reproduction)
 
-en.wikipedia.org/wiki/Conway's_Game_of_Life
+http://en.wikipedia.org/wiki/Conway's_Game_of_Life

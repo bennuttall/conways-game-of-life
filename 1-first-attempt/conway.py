@@ -4,8 +4,8 @@ import argparse
 
 
 def evolve_cell(cell_alive, num_neighbours):
-    if cell_alive:
-        return num_neighbours > 1 if num_neighbours < 4 else False
+    if alive:
+        return num_neighbours in [2, 3]
     return num_neighbours == 3
 
 
@@ -77,9 +77,19 @@ def world_to_string(world, char):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r", "--rows", help="height of the grid", type=int, default=25)
-    parser.add_argument("-c", "--cols", help="width of the grid", type=int, default=25)
-    parser.add_argument("--char", help="character to represent cell", default='O')
+    parser.add_argument("-r",
+            "--rows",
+            help="height of the grid",
+            type=int,
+            default=25)
+    parser.add_argument("-c",
+            "--cols",
+            help="width of the grid",
+            type=int,
+            default=25)
+    parser.add_argument("--char",
+            help="character to represent cell",
+            default='O')
     args = parser.parse_args()
 
     rows = args.rows

@@ -12,9 +12,13 @@ class GameOfLife(object):
 
     def __str__(self):
         width, height = self.size
-        return '\n'.join(' '.join(self.draw_cell(x, y)
-                                  for x in range(width))
-                         for y in range(height))
+        return '\n'.join(
+            ' '.join(
+                self.draw_cell(x, y)
+                for x in range(width)
+            )
+            for y in range(height)
+        )
 
     def __iter__(self):
         return self

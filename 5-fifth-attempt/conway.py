@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from random import choice
 from itertools import product
 from time import sleep
@@ -10,10 +12,12 @@ class GameOfLife(object):
 
     def __str__(self):
         width, height = self.size
-        return '\n'.join(' '.join('O' if (x, y) in self.live_cells else ' ' for x in range(width)) for y in range(height))
+        return '\n'.join(' '.join(self.draw_cell(x, y)
+                                  for x in range(width))
+                         for y in range(height))
 
     def __iter__(self):
-       return self
+        return self
 
     def __next__(self):
         self.evolve_world()
@@ -26,18 +30,23 @@ class GameOfLife(object):
 
     def count_neighbours(self, cell):
         x, y = cell
-        neighbour_cells = [(x - 1, y - 1), (x + 0, y - 1), (x + 1, y - 1),
-                           (x - 1, y + 0),                 (x + 1, y + 0),
-                           (x - 1, y + 1), (x + 0, y + 1), (x + 1, y + 1)]
-        return sum(neighbour in self.live_cells for neighbour in neighbour_cells)
+        neighbours = [(x - 1, y - 1), (x + 0, y - 1), (x + 1, y - 1),
+                      (x - 1, y + 0),                 (x + 1, y + 0),
+                      (x - 1, y + 1), (x + 0, y + 1), (x + 1, y + 1)]
+        return sum(neighbour in self.live_cells for neighbour in neighbours)
 
     def evolve_world(self):
         width, height = self.size
-        self.live_cells = {cell for cell in product(range(width), range(height)) if self.evolve_cell(cell)}
+        grid = product(range(width), range(height))
+        self.live_cells = {cell for cell in grid if self.evolve_cell(cell)}
 
     def random_world(self):
         width, height = self.size
-        self.live_cells = {cell for cell in product(range(width), range(height)) if choice((0, 1))}
+        grid = product(range(width), range(height))
+        self.live_cells = {cell for cell in grid if choice((0, 1))}
+
+    def draw_cell(self, x, y):
+        return 'O' if (x, y) in self.live_cells else ' '
 
 
 def main():

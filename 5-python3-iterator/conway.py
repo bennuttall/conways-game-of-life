@@ -34,9 +34,8 @@ class GameOfLife(object):
 
     def count_neighbours(self, cell):
         x, y = cell
-        neighbours = [(x - 1, y - 1), (x + 0, y - 1), (x + 1, y - 1),
-                      (x - 1, y + 0),                 (x + 1, y + 0),
-                      (x - 1, y + 1), (x + 0, y + 1), (x + 1, y + 1)]
+        deltas = set(list(product([-1, 0, 1], repeat=2))) - set([(0, 0)])
+        neighbours = ((x + dx, y + dy) for dx, dy in deltas)
         return sum(neighbour in self.live_cells for neighbour in neighbours)
 
     def evolve_world(self):

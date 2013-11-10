@@ -49,7 +49,8 @@ class GameOfLife(object):
         self.live_cells = {cell for cell in grid if choice((0, 1))}
 
     def draw_cell(self, x, y):
-        return 'O' if (x, y) in self.live_cells else ' '
+        cell = (x, y)
+        return 'O' if cell in self.live_cells else ' '
 
 
 def main():

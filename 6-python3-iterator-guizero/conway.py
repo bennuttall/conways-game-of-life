@@ -1,30 +1,23 @@
-#!/usr/bin/python3
-
 from itertools import product
 from random import choice
 from time import sleep
+from guizero import App, CheckBox
 
 
-class GameOfLife(object):
+class GameOfLife:
     def __init__(self, width, height):
+        self.app = App(title="Conway's GUI of life", width=500, height=500, layout="grid")
+        self.app.repeat(100, self.evolve_world)
         self.size = (width, height)
         self.random_world()
+        self.create_checkboxes()
 
-    def __str__(self):
+    def create_checkboxes(self):
         width, height = self.size
-        return '\n'.join(
-            ''.join(
-                self.draw_cell(x, y) for x in range(width)
-            )
+        self.checkboxes = [
+            [CheckBox(self.app, grid=[x, y]) for x in range(width)]
             for y in range(height)
-        )
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        self.evolve_world()
-        return self
+        ]
 
     def evolve_cell(self, cell):
         alive = cell in self.live_cells
@@ -41,6 +34,9 @@ class GameOfLife(object):
         width, height = self.size
         world = product(range(width), range(height))
         self.live_cells = {cell for cell in world if self.evolve_cell(cell)}
+        for x in range(width):
+            for y in range(height):
+                self.checkboxes[y][x].value = 1 if (x, y) in self.live_cells else 0
 
     def random_world(self):
         width, height = self.size
@@ -49,14 +45,15 @@ class GameOfLife(object):
 
     def draw_cell(self, x, y):
         cell = (x, y)
-        return '█' if cell in self.live_cells else ' '
+        return 'O' if cell in self.live_cells else ' '
+
+    def show(self):
+        self.app.display()
 
 
 def main():
-    game = GameOfLife(235, 100)
-    for i in game:
-        print(i)
-        sleep(0.1)
+    game = GameOfLife(10, 10)
+    game.show()
 
 if __name__ == '__main__':
     main()

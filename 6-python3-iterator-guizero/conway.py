@@ -6,18 +6,35 @@ from guizero import App, CheckBox
 
 class GameOfLife:
     def __init__(self, width, height):
-        self.app = App(title="Conway's GUI of life", width=500, height=500, layout="grid")
-        self.app.repeat(100, self.evolve_world)
+        self.app = App(title="Conway's GUI of Life", width=1100, height=950, layout="grid")
+        self.app.repeat(500, self.evolve_world)
         self.size = (width, height)
         self.random_world()
         self.create_checkboxes()
 
+    def __call__(self):
+        self.app.display()
+
+    def get_checkbox(self, x, y):
+        def update():
+            cell = (x, y)
+            if cell in self.live_cells:
+                self.live_cells.remove(cell)
+            else:
+                self.live_cells.add(cell)
+
+        cb = CheckBox(self.app, grid=[x, y], text='', command=update)
+        return cb
+
     def create_checkboxes(self):
         width, height = self.size
         self.checkboxes = [
-            [CheckBox(self.app, grid=[x, y]) for x in range(width)]
+            [self.get_checkbox(x, y) for x in range(width)]
             for y in range(height)
         ]
+        for x in range(width):
+            for y in range(height):
+                self.checkboxes[y][x].value = (x, y) in self.live_cells
 
     def evolve_cell(self, cell):
         alive = cell in self.live_cells
@@ -43,17 +60,7 @@ class GameOfLife:
         world = product(range(width), range(height))
         self.live_cells = {cell for cell in world if choice([0, 1])}
 
-    def draw_cell(self, x, y):
-        cell = (x, y)
-        return 'O' if cell in self.live_cells else ' '
-
-    def show(self):
-        self.app.display()
-
-
-def main():
-    game = GameOfLife(10, 10)
-    game.show()
+main = GameOfLife(30, 30)
 
 if __name__ == '__main__':
     main()
